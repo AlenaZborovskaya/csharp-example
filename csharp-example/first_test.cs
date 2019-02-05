@@ -12,6 +12,7 @@ namespace csharp_example
         private IWebDriver driver;
         private WebDriverWait wait;
 
+
         [SetUp]
         public void start()
         {
