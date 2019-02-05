@@ -25,6 +25,7 @@ namespace csharp_example
         {
             driver.Url = "http://www.google.com/";
             driver.FindElement(By.Name("q")).SendKeys("webdriver");
+            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@jsname='VlcLAe']//*[@value='Поиск в Google']")));
             driver.FindElement(By.XPath("//div[@jsname='VlcLAe']//*[@value='Поиск в Google']")).Click();
             wait.Until(ExpectedConditions.TitleIs("webdriver - Поиск в Google"));
         }
