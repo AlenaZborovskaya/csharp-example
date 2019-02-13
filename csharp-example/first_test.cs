@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 
 namespace csharp_example
@@ -12,25 +13,27 @@ namespace csharp_example
         private IWebDriver driver;
         private WebDriverWait wait;
 
-
         [SetUp]
         public void start()
         {
-            driver = new ChromeDriver();
+            FirefoxOptions options = new FirefoxOptions();
+            options.BrowserExecutableLocation = @"C:\Program Files\Mozilla Firefox\firefox.exe";
+            options.UseLegacyImplementation = true;
+            driver = new FirefoxDriver(options);
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
         }
 
         [Test]
         public void FirstTest()
         {
-            driver.Url = "http://www.google.com/";
+            driver.Url = "https://www.google.com/";
             driver.FindElement(By.Name("q")).SendKeys("webdriver");
             wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@jsname='VlcLAe']//*[@value='Поиск в Google']")));
             driver.FindElement(By.XPath("//div[@jsname='VlcLAe']//*[@value='Поиск в Google']")).Click();
             wait.Until(ExpectedConditions.TitleIs("webdriver - Поиск в Google"));
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void stop()
         {
             driver.Quit();
