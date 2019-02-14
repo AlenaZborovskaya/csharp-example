@@ -62,9 +62,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="First_test.cs" />
+    <Compile Include="Stickers_test.cs" />
     <Compile Include="Left_panel_test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="login_test.cs" />
+    <Compile Include="GeneralElements.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
