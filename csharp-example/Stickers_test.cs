@@ -23,17 +23,17 @@ namespace csharp_example
         }
 
         [Test]
-        public void FirstTest()
+        public void Stickerstest()
         {
             driver.Url = "http://localhost/litecart/en/";
 
             // Проверяем, что для каждого товара есть стикер
-            if (elements.AreElementsPresent(By.XPath("//*[@class='product column shadow hover-light']")) == true)
+            if (elements.AreElementsPresent(driver,By.XPath("//*[@class='product column shadow hover-light']")) == true)
             {
                 var stickers = driver.FindElements(By.XPath("//*[@class='product column shadow hover-light']"));
                 foreach (var element in stickers)
                 {
-                    wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[contains(@class,'sticker')]")));
+                    Assert.IsTrue(elements.IsElementPresent(driver, By.XPath("//*[contains(@class,'sticker')]")));
                 }
             }
         }

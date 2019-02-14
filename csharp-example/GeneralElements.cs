@@ -16,7 +16,7 @@ namespace QAFramework.Elements
         /// <param name="driver"></param>
         /// <param name="locator"></param>
         /// <returns></returns>
-        public bool IsElementPresent(By locator)
+        public bool IsElementPresent(IWebDriver driver, By locator)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace QAFramework.Elements
         /// <param name="driver"></param>
         /// <param name="locator"></param>
         /// <returns></returns>
-        public bool AreElementsPresent(By locator)
+        public bool AreElementsPresent(IWebDriver driver, By locator)
         {
             return driver.FindElements(locator).Count > 0;
         }
