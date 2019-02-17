@@ -41,10 +41,10 @@ namespace csharp_example
                 driver.FindElement(By.XPath(newCountryLocator)).Click();
 
                 List<string> geoZones = new List<string>();
-                var cells = driver.FindElements(By.XPath("//form[@name='form_geo_zone']//td[3]"));
+                var cells = driver.FindElements(By.XPath("//form[@name='form_geo_zone']//td[3]//option[@selected='selected']"));
                 foreach (var element in cells)
                 {
-                    string zone = element.GetAttribute("selected");
+                    string zone = element.GetAttribute("innerText");
 
                     geoZones.Add(zone);
                 }
@@ -52,8 +52,6 @@ namespace csharp_example
                 List<string> sortedZones = new List<string>();
                 sortedZones.AddRange(geoZones);
                 sortedZones.Sort();
-
-
                 Assert.AreEqual(geoZones, sortedZones);
 
                 // Выходим из проверяемой страны
