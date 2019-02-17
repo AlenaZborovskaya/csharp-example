@@ -39,5 +39,6 @@ namespace QAFramework.Elements
         {
             return driver.FindElements(locator).Count > 0;
         }
+
     }
 }

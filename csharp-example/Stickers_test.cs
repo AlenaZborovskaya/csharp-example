@@ -28,9 +28,9 @@ namespace csharp_example
             driver.Url = "http://localhost/litecart/en/";
 
             // Проверяем, что для каждого товара есть стикер
-            if (elements.AreElementsPresent(driver,By.XPath("//*[@class='product column shadow hover-light']")) == true)
+            if (elements.AreElementsPresent(driver,By.XPath("//*[contains(@class,'product column')]")) == true)
             {
-                var stickers = driver.FindElements(By.XPath("//*[@class='product column shadow hover-light']"));
+                var stickers = driver.FindElements(By.XPath("//*[contains(@class,'product column')]"));
                 foreach (var element in stickers)
                 {
                     Assert.IsTrue(elements.IsElementPresent(driver, By.XPath("//*[contains(@class,'sticker')]")));
