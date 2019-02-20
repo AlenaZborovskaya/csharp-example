@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="First_test.cs" />
+    <Compile Include="Task_11_test.cs" />
     <Compile Include="Zadanie9_2_test.cs" />
     <Compile Include="Zadanie_10_test.cs" />
     <Compile Include="SortedCountries_test.cs" />
