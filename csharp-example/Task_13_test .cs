@@ -39,12 +39,16 @@ namespace csharp_example
                 {
                     driver.FindElement(By.XPath("//*[@id='box-product']//select")).SendKeys("large" + Keys.Enter);
                 }
-                //countBefore = driver.FindElement(By.XPath("//span[@class='quantity']")).GetAttribute("textContent");
+                string before = driver.FindElement(By.XPath("//span[@class='quantity']")).GetAttribute("textContent");
+                int countBefore = Convert.ToInt32(before);
                 driver.FindElement(By.XPath("//button[@name='add_cart_product']")).Click();
-                driver.Navigate().Refresh();
-                string countAfter = driver.FindElement(By.XPath("//span[@class='quantity']")).GetAttribute("textContent");
+                string after = driver.FindElement(By.XPath("//span[@class='quantity']")).GetAttribute("textContent");
+                int countAfter = Convert.ToInt32(before);
 
-                //wait.Until(ExpectedConditions.StalenessOf(countBefore));
+                if (countAfter > countBefore)
+                {
+                    driver.FindElement(By.XPath("//a[contains(text(),'Checkout »')]")).Click();
+                }
             }
 
         }

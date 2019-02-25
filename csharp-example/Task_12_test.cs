@@ -5,6 +5,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System.IO;
 using System;
+using System.Reflection;
 
 namespace csharp_example
 {
@@ -22,13 +23,6 @@ namespace csharp_example
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
         }
 
-        public static string MakeRelative(string filePath, string referencePath)
-        {
-            var fileUri = new Uri(filePath);
-            var referenceUri = new Uri(referencePath);
-            return referenceUri.MakeRelativeUri(fileUri).ToString();
-        }
-
         [Test]
         public void ProductCreation()
         {
@@ -39,13 +33,9 @@ namespace csharp_example
             driver.FindElement(By.Name("login")).Click();
             wait.Until(ExpectedConditions.TitleIs("My Store"));
 
-            //D:\selenium_courses\csharp - example\csharp - example\1.jpg
-            var link = MakeRelative(@"D:\selenium_courses\csharp-example\csharp-example\1.jpg", @"D:\selenium_courses\csharp-example\");
-            var test = @"..\..\";
-            string file = Path.GetFullPath(link);
-
-            
-
+            var test = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\1.jpg";
+            string file = Path.GetFullPath(test);
+             
             // Заполняем форму товара на вкладке General
             driver.FindElement(By.XPath("//li[@id='app-']//*[contains(text(),'Catalog')]")).Click();
             driver.FindElement(By.XPath("//a[@class='button'][contains(text(),' Add New Product')]")).Click();
@@ -55,7 +45,7 @@ namespace csharp_example
             driver.FindElement(By.XPath("//input[@type='checkbox'][@name='product_groups[]'][@value='1-2']")).Click();
             driver.FindElement(By.XPath("//*[@name='quantity']")).Clear();
             driver.FindElement(By.XPath("//*[@name='quantity']")).SendKeys("150");
-            driver.FindElement(By.Name("new_images[]")).SendKeys(link);
+            driver.FindElement(By.Name("new_images[]")).SendKeys(file);
             driver.FindElement(By.XPath("//*[@name='date_valid_from']")).SendKeys("22.02.2019");
             driver.FindElement(By.XPath("//*[@name='date_valid_to']")).SendKeys("23.02.2019");
 
