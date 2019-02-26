@@ -31,8 +31,9 @@ namespace csharp_example
         [Test]
         public void NewUserTest()
         {
-           
-        
+            string mail = CreateRandormMail();
+
+
             driver.Url = "http://localhost/litecart/en/";
             driver.FindElement(By.XPath("//*[@id='box-account-login']//a[contains(text(),'New customers click here')]")).Click();
            // wait.Until(ExpectedConditions.TitleIs("Create Account"));
@@ -43,13 +44,13 @@ namespace csharp_example
             driver.FindElement(By.XPath("//*[@name='city']")).SendKeys("NiNo");
             driver.FindElement(By.XPath("//*[@role='combobox']")).Click();
             driver.FindElement(By.XPath("//*[@type='search']")).SendKeys("United States" + Keys.Enter);
-            driver.FindElement(By.XPath("//input[@type='email']")).SendKeys(CreateRandormMail());
+            driver.FindElement(By.XPath("//input[@type='email']")).SendKeys(mail);
             driver.FindElement(By.XPath("//input[@type='tel']")).SendKeys("12345678910");
             driver.FindElement(By.XPath("//input[@name='password']")).SendKeys("qwerty");
             driver.FindElement(By.XPath("//input[@name='confirmed_password']")).SendKeys("qwerty");
             driver.FindElement(By.XPath("//button[@type='submit']")).Click();
             driver.FindElement(By.XPath("//*[@id='box-account']//a[contains(text(),'Logout')]")).Click();
-            driver.FindElement(By.XPath("//*[@name='email']")).SendKeys("shum-1271@mail.ru");
+            driver.FindElement(By.XPath("//*[@name='email']")).SendKeys(mail);
             driver.FindElement(By.XPath("//input[@type='password']")).SendKeys("qwerty");
             driver.FindElement(By.XPath("//button[@name='login']")).Click();
             driver.FindElement(By.XPath("//*[@id='box-account']//a[contains(text(),'Logout')]")).Click();
