@@ -34,6 +34,8 @@ namespace csharp_example
             // Добавляем товары в корзину
             for (int i=1; i <= 3; i++)
             {
+                // вопрос, на это шаге в дебаге проходит, но при прогоне теста падает, хотя ожидание добавила
+                wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id='box-most-popular']")));
                 driver.FindElement(By.XPath("//*[@id='box-most-popular']//li["+ i +"]")).Click();
                 if (elements.IsElementPresent(driver, By.XPath("//*[@id='box-product']//select")) == true)
                 {
@@ -43,12 +45,21 @@ namespace csharp_example
                 int countBefore = Convert.ToInt32(before);
                 driver.FindElement(By.XPath("//button[@name='add_cart_product']")).Click();
                 string after = driver.FindElement(By.XPath("//span[@class='quantity']")).GetAttribute("textContent");
-                int countAfter = Convert.ToInt32(before);
+                int countAfter = Convert.ToInt32(after);
 
                 if (countAfter > countBefore)
                 {
-                    driver.FindElement(By.XPath("//a[contains(text(),'Checkout »')]")).Click();
+                    driver.FindElement(By.XPath("//a[@href ='http://localhost/litecart/en/']")).Click();
                 }
+            }
+
+            driver.FindElement(By.XPath("//a[@class='link'][contains(text(),'Checkout »')]")).Click();
+            IList<IWebElement> products = driver.FindElements(By.XPath("//ul[@class='items']/li"));
+            foreach (var product in products)
+            {
+                string name = driver.FindElement(By.XPath("//*[@id='box-checkout-cart']//strong")).GetAttribute("textContent");
+                IWebElement element = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//button[@type='submit'][contains(text(),'Remove')]']")));
+                element.Click();
             }
 
         }
