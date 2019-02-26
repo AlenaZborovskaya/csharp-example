@@ -34,34 +34,32 @@ namespace csharp_example
             // Добавляем товары в корзину
             for (int i=1; i <= 3; i++)
             {
-                // вопрос, на это шаге в дебаге проходит, но при прогоне теста падает, хотя ожидание добавила
-                wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id='box-most-popular']")));
                 driver.FindElement(By.XPath("//*[@id='box-most-popular']//li["+ i +"]")).Click();
                 if (elements.IsElementPresent(driver, By.XPath("//*[@id='box-product']//select")) == true)
                 {
                     driver.FindElement(By.XPath("//*[@id='box-product']//select")).SendKeys("large" + Keys.Enter);
                 }
-                string before = driver.FindElement(By.XPath("//span[@class='quantity']")).GetAttribute("textContent");
-                int countBefore = Convert.ToInt32(before);
-                driver.FindElement(By.XPath("//button[@name='add_cart_product']")).Click();
-                string after = driver.FindElement(By.XPath("//span[@class='quantity']")).GetAttribute("textContent");
-                int countAfter = Convert.ToInt32(after);
 
-                if (countAfter > countBefore)
+                string before = driver.FindElement(By.XPath("//span[@class='quantity']")).Text;
+                driver.FindElement(By.XPath("//button[@name='add_cart_product']")).Click();
+                wait.Until(ExpectedConditions.InvisibilityOfElementWithText(By.XPath("//div[@id='cart']//span[@class='quantity']"), before));
+                string after = driver.FindElement(By.XPath("//span[@class='quantity']")).Text;
+                if (after != before)
                 {
                     driver.FindElement(By.XPath("//a[@href ='http://localhost/litecart/en/']")).Click();
                 }
             }
 
             driver.FindElement(By.XPath("//a[@class='link'][contains(text(),'Checkout »')]")).Click();
-            IList<IWebElement> products = driver.FindElements(By.XPath("//ul[@class='items']/li"));
-            foreach (var product in products)
+            driver.FindElement(By.XPath("//li[@class='shortcut'][1]")).Click();
+            int productsInBusket = driver.FindElements(By.XPath("//*[@id='checkout-summary-wrapper']//tbody/tr/td[contains(@class,'item')]")).Count;
+            for (int i = 1; i <= productsInBusket; i++)
             {
-                string name = driver.FindElement(By.XPath("//*[@id='box-checkout-cart']//strong")).GetAttribute("textContent");
-                IWebElement element = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//button[@type='submit'][contains(text(),'Remove')]']")));
-                element.Click();
+                string product = driver.FindElement(By.XPath("//*[@id='checkout-summary-wrapper']//tbody/tr/td[contains(@class,'item')]")).Text;
+                driver.FindElement(By.XPath("//button[@type='submit'][contains(text(),'Remove')]")).Click();
+                wait.Until(ExpectedConditions.InvisibilityOfElementWithText(By.XPath("//*[@id='checkout-summary-wrapper']//tbody/tr/td[contains(@class,'item')]"), product));
             }
-
+            wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[contains(text(),'There are no items in your cart.')]")));
         }
 
         [OneTimeTearDown]
