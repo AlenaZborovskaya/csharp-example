@@ -1,8 +1,9 @@
 ﻿using OpenQA.Selenium;
+using System.Collections.Generic;
 
 namespace QAFramework.Elements
 {
-    public class GeneralElements 
+    public class GeneralElements
     {
         private IWebDriver driver;
 
@@ -40,5 +41,6 @@ namespace QAFramework.Elements
             return driver.FindElements(locator).Count > 0;
         }
 
+        
     }
 }
