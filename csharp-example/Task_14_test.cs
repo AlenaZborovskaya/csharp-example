@@ -27,16 +27,17 @@ namespace csharp_example
            
         }
 
-        public string ThereIsWindowOtherThan(ICollection<string> windows)
+        public Func<IWebDriver, string> ThereIsWindowOtherThan(ICollection<string> windows)
         {
             ICollection<string> newWindows = driver.WindowHandles;
+
             foreach (var oldWindow in windows)
             {
                 newWindows.Remove(oldWindow);
             }
             if (newWindows.Count > 0)
             {
-                return newWindows.GetEnumerator().Current;
+               newWindows.GetEnumerator().MoveNext();
             }
            return null;
         }
@@ -52,7 +53,7 @@ namespace csharp_example
 
             driver.FindElement(By.XPath("//*[@id='content']//*[contains(text(),'Afghanistan')]")).Click();
             int MenuCount = driver.FindElements(By.XPath("//*[contains(@class, 'fa fa-external-link')]")).Count;
-            ReadOnlyCollection<IWebElement> menu = driver.FindElements(By.XPath("//*[contains(@class, 'fa fa-external-link')]"));
+            var menu = driver.FindElements(By.XPath("//*[contains(@class, 'fa fa-external-link')]"));
             string mainWindow = driver.CurrentWindowHandle;
             ICollection<string> oldWindows = driver.WindowHandles;
             for (int i = 0; i <= MenuCount - 1; i++)
@@ -63,16 +64,6 @@ namespace csharp_example
                 driver.Close();
                 driver.SwitchTo().Window(mainWindow);
             }
-            
-       
-       
-
-            
-
-            driver.Close();
-            driver.SwitchTo().Window(mainWindow);
-
-
         }
 
         
