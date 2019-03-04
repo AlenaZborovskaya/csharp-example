@@ -1,13 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
-using QAFramework.Elements;
-using System.Collections.Generic;
-using System.IO;
-using System;
-using System.Collections.ObjectModel;
 
 namespace csharp_example
 {
@@ -17,8 +14,6 @@ namespace csharp_example
         private static IWebDriver driver;
         private WebDriverWait wait;
 
-        GeneralElements elements = new GeneralElements(driver);
-
         [SetUp]
         public void start()
         {
@@ -27,20 +22,6 @@ namespace csharp_example
            
         }
 
-        public Func<IWebDriver, string> ThereIsWindowOtherThan(ICollection<string> windows)
-        {
-            ICollection<string> newWindows = driver.WindowHandles;
-
-            foreach (var oldWindow in windows)
-            {
-                newWindows.Remove(oldWindow);
-            }
-            if (newWindows.Count > 0)
-            {
-               newWindows.GetEnumerator().MoveNext();
-            }
-           return null;
-        }
 
         [Test]
         public void WindowTest()
@@ -51,22 +32,29 @@ namespace csharp_example
             driver.FindElement(By.Name("password")).SendKeys("admin");
             driver.FindElement(By.Name("login")).Click();
 
+
             driver.FindElement(By.XPath("//*[@id='content']//*[contains(text(),'Afghanistan')]")).Click();
-            int MenuCount = driver.FindElements(By.XPath("//*[contains(@class, 'fa fa-external-link')]")).Count;
-            var menu = driver.FindElements(By.XPath("//*[contains(@class, 'fa fa-external-link')]"));
-            string mainWindow = driver.CurrentWindowHandle;
-            ICollection<string> oldWindows = driver.WindowHandles;
-            for (int i = 0; i <= MenuCount - 1; i++)
-            {
-                menu[i].Click();
-                string newWindow = wait.Until(ThereIsWindowOtherThan(oldWindows));
-                driver.SwitchTo().Window(driver.WindowHandles[1]);
-                driver.Close();
-                driver.SwitchTo().Window(mainWindow);
-            }
+            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//td[@id='content']")));
+                IList<IWebElement> menu = driver.FindElements(By.XPath("//*[contains(@class, 'fa fa-external-link')]"));
+                string mainWindow = driver.CurrentWindowHandle;
+                int oldWindowsCount = driver.WindowHandles.ToList().Count;
+                foreach (IWebElement element in menu)
+                {
+                    element.Click();
+
+                    wait.Until(driver => driver.WindowHandles.Count == (oldWindowsCount + 1));
+
+                    foreach (string handle in driver.WindowHandles.ToList())
+                    {
+                        if (mainWindow != handle)
+                        {
+                            driver.SwitchTo().Window(handle).Close();
+                            driver.SwitchTo().Window(mainWindow);
+                        }
+                    }
+                }
         }
 
-        
 
         [OneTimeTearDown]
         public void stop()
